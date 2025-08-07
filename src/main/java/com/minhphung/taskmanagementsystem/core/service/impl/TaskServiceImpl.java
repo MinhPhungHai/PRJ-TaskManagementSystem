@@ -48,25 +48,25 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDto> getAllCompletedTasks() {
-        List<Task> tasks = taskRepository.findByCompletedEquals(true);
+        List<Task> tasks = taskRepository.findAllByCompleted(true);
         return tasks.stream().map(taskMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
     public List<TaskDto> getAllIncompleteTasks() {
-        List<Task> tasks = taskRepository.findByCompletedEquals(false);
+        List<Task> tasks = taskRepository.findAllByCompleted(false);
         return tasks.stream().map(taskMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
     public List<TaskDto> getAllUrgentTasks() {
-        List<Task> tasks = taskRepository.findByUrgentEquals(true);
+        List<Task> tasks = taskRepository.findAllByUrgent(true);
         return tasks.stream().map(taskMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
     public List<TaskDto> getAllNonUrgentTasks() {
-        List<Task> tasks = taskRepository.findByUrgentEquals(false);
+        List<Task> tasks = taskRepository.findAllByUrgent(false);
         return tasks.stream().map(taskMapper::toDto).collect(Collectors.toList());
     }
 

@@ -19,43 +19,9 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private UserMapper userMapper;
 
-    /**
-     * Creates and saves a new employee in the system.
-     *
-     * @param userDto the employee data to create
-     * @return the created {@link UserDto} with generated ID and persisted data
-     */
-    @Override
-    public UserDto createUser(UserDto userDto) {
-        //Encrypt the password
-        String EncryptedPassword = Encryption.md5Encryption(userDto.getPassword());
-        userDto.setPassword(EncryptedPassword);
-
-        User user = userMapper.toEntity(userDto);
-        User savedUser = userRepository.save(user);
-        return userMapper.toDto(savedUser);
-    }
-
     @Override
     public List<UserDto> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream().map(userMapper::toDto).collect(Collectors.toList());
-    }
-
-    /**
-     * Validate the input log in credentials (username and password)
-     *
-     * @param username String
-     * @param password String
-     * @return boolean
-     * @throws ResourceNotFoundException if no employee is found with the given username
-     */
-    @Override
-    public boolean validateLogInCredentials(String username, String password) {
-        UserDto userDto = getUserByUsername(username);
-        String EncryptedPassword = Encryption.md5Encryption(password);
-
-        return userDto.getPassword().equals(EncryptedPassword);
+        return List.of();
     }
 
     /**
@@ -85,5 +51,35 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(()-> new ResourceNotFoundException("There is no user with username: " + username));
         return userMapper.toDto(user);
+    }
+
+    @Override
+    public List<UserDto> getAllUsersByManagerId(Long managerId) {
+        List<User> users = userRepository.findAllByManagerId(managerId);
+        return users.stream().map(userMapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDto updateUser(Long employeeId, UserDto userDto) {
+        User user = userRepository.findById(employeeId)
+                .orElseThrow(()-> new ResourceNotFoundException("There is no user with id: " + employeeId));
+
+        user.setUsername(userDto.getUsername());
+        user.setPassword(userDto.getPassword());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setEmail(userDto.getEmail());
+        user.setManagerId(userDto.getManagerId());
+        user.setDeptId(userDto.getDeptId());
+
+        User savedUser = userRepository.save(user);
+        return userMapper.toDto(savedUser);
+    }
+
+    @Override
+    public void deleteUser(Long employeeId) {
+        User user = userRepository.findById(employeeId)
+                .orElseThrow(()-> new ResourceNotFoundException("There is no user with id: " + employeeId));
+        userRepository.delete(user);
     }
 }

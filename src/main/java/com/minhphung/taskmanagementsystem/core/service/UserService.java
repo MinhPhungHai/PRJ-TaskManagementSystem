@@ -5,12 +5,13 @@ import com.minhphung.taskmanagementsystem.core.dto.UserDto;
 import java.util.List;
 
 public interface UserService {
-    //Authentication
-    boolean validateLogInCredentials(String username, String password);
-    UserDto createUser(UserDto userDto);
-
-    //Get Employee info
+    //Get User info
     List<UserDto> getAllUsers();
     UserDto getUserById(Long employeeId);
     UserDto getUserByUsername(String username);
+    List<UserDto> getAllUsersByManagerId(Long managerId);
+
+    //Update & Delete User info
+    UserDto updateUser(Long employeeId, UserDto userDto);
+    void deleteUser(Long employeeId);
 }

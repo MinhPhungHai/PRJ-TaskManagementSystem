@@ -9,8 +9,7 @@ import java.util.UUID;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, UUID> {
-    List<Task> findByCompletedEquals(boolean completed);
-    List<Task> findByUrgentEquals(boolean urgent);
-
+    List<Task> findAllByCompleted(boolean completed);
+    List<Task> findAllByUrgent(boolean urgent);
     List<Task> findAllByUserId(Long userId);
 }

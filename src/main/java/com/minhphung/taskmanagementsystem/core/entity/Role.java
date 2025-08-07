@@ -15,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Integer RoleId;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false, unique = true)
