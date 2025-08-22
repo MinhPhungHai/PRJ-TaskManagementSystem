@@ -7,10 +7,11 @@ import com.minhphung.taskmanagementsystem.auth.security.jwt.JwtUtils;
 import com.minhphung.taskmanagementsystem.auth.security.services.UserDetailsImpl;
 import com.minhphung.taskmanagementsystem.auth.service.AuthService;
 import com.minhphung.taskmanagementsystem.core.dto.UserDto;
-import com.minhphung.taskmanagementsystem.core.entity.ERole;
+import com.minhphung.taskmanagementsystem.core.entity.GroupRole;
 import com.minhphung.taskmanagementsystem.core.entity.Role;
 import com.minhphung.taskmanagementsystem.core.entity.User;
 import com.minhphung.taskmanagementsystem.core.mapper.UserMapper;
+import com.minhphung.taskmanagementsystem.core.repository.GroupRoleRepository;
 import com.minhphung.taskmanagementsystem.core.repository.RoleRepository;
 import com.minhphung.taskmanagementsystem.core.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
     UserRepository userRepository;
 
     @Autowired
-    RoleRepository roleRepository;
+    GroupRoleRepository groupRoleRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -61,30 +62,17 @@ public class AuthServiceImpl implements AuthService {
         User user = new User(
                 signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
-                passwordEncoder.encode(signUpRequest.getPassword())
+                passwordEncoder.encode(signUpRequest.getPassword()),
+                signUpRequest.getFirstName(),
+                signUpRequest.getLastName()
         );
 
-        Set<String> strRoles = signUpRequest.getRoles();
-        Set<Role> roles = new HashSet<>();
+        Set<GroupRole> roles = new HashSet<>();
+        GroupRole defaultRole = groupRoleRepository.findByName("USER");
+        roles.add(defaultRole);
 
-        if (strRoles == null) {
-            roles.add(roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Role not found")));
-        } else {
-            for (String role : strRoles) {
-                Role foundRole = switch (role) {
-                    case "admin" -> roleRepository.findByName(ERole.ROLE_ADMIN)
-                            .orElseThrow(() -> new RuntimeException("Role not found"));
-                    case "manager" -> roleRepository.findByName(ERole.ROLE_MANAGER)
-                            .orElseThrow(() -> new RuntimeException("Role not found"));
-                    default -> roleRepository.findByName(ERole.ROLE_USER)
-                            .orElseThrow(() -> new RuntimeException("Role not found"));
-                };
-                roles.add(foundRole);
-            }
-        }
+        user.setGroupRoles(roles);
 
-        user.setRoles(roles);
         User savedUser = userRepository.save(user);
         return userMapper.toDto(savedUser);
     }
@@ -103,14 +91,9 @@ public class AuthServiceImpl implements AuthService {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
+        List<String> permissions = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-        return new JwtResponse(
-                jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                roles);
+        return new JwtResponse(jwt);
     }
 }

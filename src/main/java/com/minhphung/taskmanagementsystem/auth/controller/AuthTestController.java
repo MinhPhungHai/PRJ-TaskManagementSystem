@@ -14,7 +14,7 @@ public class AuthTestController {
     }
 
     @GetMapping("/user")
-    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN') or hasAuthority('UPDATE_USER')")
     public String userAccess() {
         return "User Access";
     }

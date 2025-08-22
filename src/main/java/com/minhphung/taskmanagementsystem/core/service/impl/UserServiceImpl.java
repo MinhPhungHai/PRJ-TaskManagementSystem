@@ -6,7 +6,6 @@ import com.minhphung.taskmanagementsystem.core.exception.ResourceNotFoundExcepti
 import com.minhphung.taskmanagementsystem.core.mapper.UserMapper;
 import com.minhphung.taskmanagementsystem.core.repository.UserRepository;
 import com.minhphung.taskmanagementsystem.core.service.UserService;
-import com.minhphung.taskmanagementsystem.util.Encryption;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

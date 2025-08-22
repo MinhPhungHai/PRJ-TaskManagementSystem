@@ -19,5 +19,8 @@ public class SignUpRequest {
     String password;
     @Email
     String email;
-    Set<String> roles;
+    @NotBlank
+    String firstName;
+    @NotBlank
+    String lastName;
 }

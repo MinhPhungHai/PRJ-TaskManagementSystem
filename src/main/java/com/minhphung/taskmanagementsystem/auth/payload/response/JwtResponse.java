@@ -10,21 +10,11 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class JwtResponse {
-    String jwtToken;
-    String type = "Bearer";
-    Long id;
-    String username;
-    String email;
-    List<String> roles;
+    String jwtToken = "Bearer ";
 
-    public JwtResponse(String jwtToken, Long id, String username, String email, List<String> roles) {
-        this.jwtToken = jwtToken;
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.roles = roles;
+    public JwtResponse(String jwtToken) {
+        this.jwtToken += jwtToken;
     }
 }

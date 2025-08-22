@@ -1,6 +1,5 @@
 package com.minhphung.taskmanagementsystem.core.dto;
 
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,18 +8,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserDto {
+public class RoleDto {
     Long id;
-
-    //Log in credentials
-    String username;
-    String password;
-
-    //User information
-    String firstName;
-    String lastName;
-    String email;
-
-    Long managerId;
-    int deptId;
+    String name;
 }

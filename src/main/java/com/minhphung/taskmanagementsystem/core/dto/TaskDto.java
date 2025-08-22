@@ -14,7 +14,7 @@ import java.util.UUID;
 public class TaskDto {
 
     //ID
-    UUID taskId;
+    UUID id;
 
     //User input
     String title;

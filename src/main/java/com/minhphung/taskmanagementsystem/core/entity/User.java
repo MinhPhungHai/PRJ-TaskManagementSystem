@@ -10,16 +10,15 @@ import java.util.Set;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "users")
+@Table(name = "m_user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
 
     //Log in credentials
     @Column(name="username",unique = true, nullable = false)
@@ -36,21 +35,24 @@ public class User {
     @Email
     String email;
 
-    //User roles info
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    Set<Role> roles = new HashSet<>();
-
     @Column(name="manager_id")
     Long managerId;
     @Column(name="dept_id")
     int deptId;
 
-    public User(String username, String email, String password) {
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_group_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_role_id")
+    )
+    Set<GroupRole> groupRoles;
+
+    public User(String username, String email, String password, String firstName, String lastName) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 }

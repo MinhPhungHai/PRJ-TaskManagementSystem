@@ -1,5 +1,6 @@
 package com.minhphung.taskmanagementsystem.auth.security.services;
 
+import com.minhphung.taskmanagementsystem.core.entity.Permission;
 import com.minhphung.taskmanagementsystem.core.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,13 +27,13 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserDetailsImpl build(User user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+    public static UserDetailsImpl build(User user, List<Permission> permissions) {
+        List<GrantedAuthority> authorities = permissions.stream()
+                .map(p -> new SimpleGrantedAuthority(p.getName()))
                 .collect(Collectors.toList());
 
         return new UserDetailsImpl(
-                user.getUserId(),
+                user.getId(),
                 user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),

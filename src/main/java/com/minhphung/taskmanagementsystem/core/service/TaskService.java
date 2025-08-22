@@ -6,10 +6,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TaskService {
-
-    //boolean validateTaskTimeRangeOverlap(TaskDto taskDto);
-    //boolean hasValidTimeRange(TaskDto taskDto);
-
     TaskDto createTask(TaskDto taskDto);
 
     TaskDto getTaskById(UUID taskId);

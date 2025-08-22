@@ -13,12 +13,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "tasks")
+@Table(name = "task")
 public class Task {
     //ID
     @Id
     @GeneratedValue
-    UUID taskId;
+    UUID id;
 
     //User input
     @Column(name = "title", nullable = false)
