@@ -1,5 +1,7 @@
 package com.minhphung.taskmanagementsystem.auth.security.services;
 
+import com.minhphung.taskmanagementsystem.core.dto.PermissionDto;
+import com.minhphung.taskmanagementsystem.core.dto.UserDto;
 import com.minhphung.taskmanagementsystem.core.entity.Permission;
 import com.minhphung.taskmanagementsystem.core.entity.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,7 +16,6 @@ public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
     private long id;
     private String username;
-    //@JsonIgnore
     private String password;
     private String email;
     private Collection<? extends GrantedAuthority> authorities;
@@ -27,9 +28,9 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserDetailsImpl build(User user, List<Permission> permissions) {
+    public static UserDetailsImpl build(UserDto user, List<String> permissions) {
         List<GrantedAuthority> authorities = permissions.stream()
-                .map(p -> new SimpleGrantedAuthority(p.getName()))
+                .map(p -> new SimpleGrantedAuthority(p))
                 .collect(Collectors.toList());
 
         return new UserDetailsImpl(
